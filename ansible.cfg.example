@@ -1,0 +1,12 @@
+[defaults]
+inventory = ./inventory
+host_key_checking = False
+
+# for running on Ubuntu
+control_path=%(directory)s/%%h-%%r
+
+# replace with your private key file or other auth method
+private_key_file = ~/.ssh/example.pem
+
+# replace with your remote user
+remote_user = ubuntu

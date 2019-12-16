@@ -1,0 +1,21 @@
+---
+# defaults file for deploy
+deploy_host_name: learn-rails-docker.com
+
+deploy_app_path: "/var/www/{{ deploy_host_name }}"
+
+deploy_git_repo: git@gitlab.com:wahyubucil/learn-rails-docker.git
+
+# What kind of environment do you use on your rails app?
+# Supported environment: dotenv, figaro
+deploy_rails_env: dotenv
+
+deploy_ruby_command: "{{ ruby_rvm_install_path }}/gems/{{ ruby_version }}/wrappers/ruby"
+
+deploy_https: False
+
+# Supported options:
+# both = Support both www and non-www
+# www = Redirect non-www to www
+# non-www = Redirect www to non-www
+deploy_host_config: both

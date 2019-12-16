@@ -1,0 +1,17 @@
+---
+# tasks file for deploy_key
+- name: Ensure there's a SSH Key. If not, Create new one
+  openssh_keypair:
+    path: "{{ deploy_key_path }}"
+    type: "{{ deploy_key_type }}"
+    comment: "{{ deploy_key_comment }}"
+  become: False
+  register: deploy_key_data
+
+- name: Fail if deploy key not on the repo
+  fail:
+    msg:
+      - "Please add deploy key to the repo"
+      - "This is your deploy key data"
+      - "{{ deploy_key_data.public_key }} {{ deploy_key_data.comment }}"
+  failed_when: has_deploy_key != 'yes'

@@ -1,0 +1,49 @@
+- name: Copy environment file
+  copy:
+    src: "{{ deploy_app_path }}/.env.example"
+    dest: "{{ deploy_app_path }}/.env"
+    remote_src: yes
+
+- name: Change server host
+  replace:
+    path: "{{ deploy_app_path }}/.env"
+    regexp: "example.com"
+    replace: "{{ deploy_host_name }}"
+
+- name: Change Database Username
+  lineinfile:
+    path: "{{ deploy_app_path }}/.env"
+    regexp: "^DB_USERNAME"
+    line: "DB_USERNAME={{ postgresql_default_username }}"
+
+- name: Change Database Password
+  lineinfile:
+    path: "{{ deploy_app_path }}/.env"
+    regexp: "^DB_PASSWORD"
+    line: "DB_PASSWORD={{ postgresql_default_password }}"
+
+- name: Get secret key base
+  command: 'bash -l -c "cd {{ deploy_app_path }} && bundle exec rake secret"'
+  register: deploy_rails_secret
+
+- name: Change secret key base
+  lineinfile:
+    path: "{{ deploy_app_path }}/.env"
+    regexp: "^SECRET_KEY_BASE"
+    line: "SECRET_KEY_BASE={{ deploy_rails_secret.stdout }}"
+
+- name: Secure config and db folder
+  file:
+    path: "{{ item }}"
+    mode: "700"
+  with_items:
+    - "{{ deploy_app_path }}/config"
+    - "{{ deploy_app_path }}/db"
+
+- name: Secure env and db config file
+  file:
+    path: "{{ item }}"
+    mode: "600"
+  with_items:
+    - "{{ deploy_app_path }}/config/database.yml"
+    - "{{ deploy_app_path }}/.env"

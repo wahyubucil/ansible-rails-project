@@ -1,0 +1,38 @@
+---
+# tasks file for deploy
+- name: Create directory if it does not exist
+  file:
+    path: "{{ deploy_app_path }}"
+    state: directory
+    mode: "0755"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+- name: Config app
+  become: False
+  block:
+    - name: Clone app
+      git:
+        repo: "{{ deploy_git_repo }}"
+        dest: "{{ deploy_app_path }}"
+        accept_hostkey: yes
+
+    - name: Install app dependencies
+      command: 'bash -lc "cd {{ deploy_app_path }} && bundle install --deployment --without development test"'
+
+    - name: Config environment with dotenv
+      include_tasks: dotenv_config.yml
+      when: deploy_rails_env == 'dotenv'
+
+    - name: Config environment with figaro
+      include_tasks: figaro_config.yml
+      when: deploy_rails_env == 'figaro'
+
+    - name: Compile Rails assets and run database migrations
+      command: 'bash -lc "cd {{ deploy_app_path }} && bundle exec rake assets:precompile db:setup RAILS_ENV=production"'
+
+- name: Setup Nginx
+  include_tasks: setup_nginx.yml
+
+- name: Reboot machine
+  reboot:

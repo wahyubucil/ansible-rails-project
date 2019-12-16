@@ -1,0 +1,29 @@
+---
+# tasks file for nginx
+- name: Install Nginx
+  apt:
+    name: "nginx"
+
+- name: Stop service Nginx, if started
+  service:
+    name: nginx
+    state: stopped
+
+- name: Backup Nginx
+  command: mv /etc/nginx /etc/nginx-previous
+
+- name: Copy h5bp Nginx config
+  copy:
+    src: server-configs-nginx/
+    dest: /etc/nginx
+
+- name: Copy modules-enabled from nginx-previous
+  copy:
+    src: /etc/nginx-previous/modules-enabled
+    dest: /etc/nginx
+    remote_src: yes
+
+- name: Start service Nginx
+  service:
+    name: nginx
+    state: started

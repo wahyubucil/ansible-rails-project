@@ -1,0 +1,27 @@
+---
+# tasks file for passenger
+
+# Passenger repository setup.
+- name: Add Passenger apt key
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 561F9B9CAC40B2F7
+
+- name: Add Phusion apt repo
+  apt_repository:
+    repo: "deb https://oss-binaries.phusionpassenger.com/apt/passenger {{ ansible_distribution_release }} main"
+
+- name: Install Passenger + Nginx module
+  apt:
+    name: libnginx-mod-http-passenger
+
+- name: Ensure passenger module is enabled
+  file:
+    src: /usr/share/nginx/modules-available/mod-http-passenger.load
+    dest: /etc/nginx/modules-enabled/50-mod-http-passenger.conf
+    state: link
+
+- name: Restart service Nginx
+  service:
+    name: nginx
+    state: restarted

@@ -1,0 +1,38 @@
+---
+# tasks file for postgresql
+- name: Install PostgreSQL Python libraries
+  apt:
+    name: python3-psycopg2
+
+- name: Install PostgreSQL packages
+  apt:
+    name:
+      - postgresql
+      - postgresql-contrib
+      - libpq-dev
+
+- name: Ensure PostgreSQL is started and enabled on boot
+  service:
+    name: postgresql
+    state: started
+    enabled: true
+
+- name: Add default user to postgreSQL
+  postgresql_user:
+    name: "{{ postgresql_default_username }}"
+    password: "{{ postgresql_default_password | default(omit) }}"
+    role_attr_flags: SUPERUSER,CREATEROLE,CREATEDB
+  become: true
+  become_user: "{{ postgresql_user }}"
+  # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
+  vars:
+    ansible_ssh_pipelining: true
+
+- name: Add default database to postgreSQL
+  postgresql_db:
+    name: "{{ postgresql_default_database }}"
+  become: true
+  become_user: "{{ postgresql_user }}"
+  # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
+  vars:
+    ansible_ssh_pipelining: true

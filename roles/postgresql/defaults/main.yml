@@ -1,0 +1,9 @@
+---
+# defaults file for postgresql
+postgresql_user: postgres
+postgresql_group: postgres
+
+# Default user & database to ensure exist.
+postgresql_default_username: ubuntu
+postgresql_default_password: secretpassword
+postgresql_default_database: ubuntu

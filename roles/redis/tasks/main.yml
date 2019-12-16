@@ -1,0 +1,22 @@
+---
+# tasks file for redis
+- name: Install Redis package
+  apt:
+    name: redis-server
+
+- name: Change Redis supervised to systemd
+  lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: "^supervised"
+    line: supervised systemd
+
+- name: Restart service Redis
+  service:
+    name: redis-server
+    state: restarted
+
+- name: Ensure Redis is started and enabled on boot
+  service:
+    name: redis-server
+    state: started
+    enabled: true

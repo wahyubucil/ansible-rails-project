@@ -1,0 +1,11 @@
+- name: Copy server block
+  template:
+    src: "{{ deploy_host_config }}.conf.j2"
+    dest: "/etc/nginx/conf.d/{{ deploy_host_name }}.conf"
+  when: not deploy_https
+#TODO: Create deploy https config
+
+- name: Restart service nginx
+  service:
+    name: nginx
+    state: restarted

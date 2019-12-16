@@ -1,0 +1,7 @@
+---
+# defaults file for deploy_key
+
+# Here I use ed25519
+deploy_key_path: "~/.ssh/id_ed25519"
+deploy_key_type: "ed25519"
+deploy_key_comment: "ansible-server"

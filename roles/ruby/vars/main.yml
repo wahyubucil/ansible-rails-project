@@ -1,0 +1,18 @@
+---
+# vars file for ruby
+ruby_rvm: "{{ ruby_rvm_install_path }}/bin/rvm"
+
+ruby_rvm_symlink_binaries:
+  - "bundle"
+  - "bundler"
+  - "erb"
+  - "executable-hooks-uninstaller"
+  - "gem"
+  - "irb"
+  - "rails"
+  - "rake"
+  - "rdoc"
+  - "ri"
+  - "ruby"
+
+ruby_rvm_symlink_to: "/usr/local/bin"

@@ -1,0 +1,44 @@
+---
+- hosts: remote
+  become: True
+
+  pre_tasks:
+    - name: Update packages repository
+      apt:
+        update_cache: yes
+
+    - name: Upgrade all packages to the latest version
+      apt:
+        name: "*"
+        state: latest
+
+    - name: Remove useless packages from the cache
+      apt:
+        autoclean: yes
+
+  roles:
+    - role: nginx
+      tags: nginx
+    - role: postgresql
+      tags: postgresql
+    - role: redis
+      tags: redis
+    - role: ruby
+      tags: ruby
+    - role: nodejs
+      tags: nodejs
+    - role: passenger
+      tags: passenger
+    - role: finishing
+      tags: finishing
+
+  post_tasks:
+    - name: Remove dependencies that are no longer required
+      apt:
+        autoremove: yes
+
+    - name: Reboot machine
+      reboot:
+
+  vars_files:
+    - ./variables/global.yml

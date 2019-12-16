@@ -1,0 +1,7 @@
+---
+# tasks file for finishing
+- name: Install additional packages for Rails app
+  apt:
+    name:
+      - libmagickwand-dev
+      - imagemagick

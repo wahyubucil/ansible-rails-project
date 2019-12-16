@@ -1,0 +1,34 @@
+---
+# tasks file for ruby
+- name: Install pre-requisites package before installing Ruby using RVM
+  apt:
+    name: software-properties-common
+
+- name: Add RVM repositories
+  apt_repository:
+    repo: ppa:rael-gc/rvm
+
+- name: Install RVM
+  apt:
+    name: rvm
+
+- name: Install Ruby from RVM
+  command: "{{ ruby_rvm }} install {{ ruby_version }}"
+
+- name: Select default ruby
+  command: "{{ ruby_rvm }} alias create default {{ ruby_version }}"
+
+- name: Install bundler
+  command: "{{ ruby_rvm_install_path }}/wrappers/{{ ruby_version }}/gem install bundler"
+
+- name: Install rails
+  command: "{{ ruby_rvm_install_path }}/wrappers/{{ ruby_version }}/gem install rails -v {{ ruby_rails_version }}"
+
+- name: Symlink ruby related binaries on the system path
+  file:
+    state: "link"
+    src: "{{ ruby_rvm_install_path }}/wrappers/default/{{ item }}"
+    dest: "{{ ruby_rvm_symlink_to }}/{{ item }}"
+    owner: "root"
+    group: "root"
+  with_items: "{{ ruby_rvm_symlink_binaries }}"

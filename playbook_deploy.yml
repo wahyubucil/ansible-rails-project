@@ -1,0 +1,19 @@
+---
+- hosts: remote
+  become: True
+  vars_prompt:
+    - name: has_deploy_key
+      prompt: "Did you already add the deploy key to the repo? (yes/no)"
+      private: no
+
+  tasks:
+    - include_role:
+        name: deploy_key
+      when: has_deploy_key != 'yes'
+
+    - include_role:
+        name: deploy
+      when: has_deploy_key == 'yes'
+
+  vars_files:
+    - ./variables/global.yml
