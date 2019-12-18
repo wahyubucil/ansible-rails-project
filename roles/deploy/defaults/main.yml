@@ -1,10 +1,10 @@
 ---
 # defaults file for deploy
-deploy_host_name: learn-rails-docker.com
+deploy_host_name: example.com
 
 deploy_app_path: "/var/www/{{ deploy_host_name }}"
 
-deploy_git_repo: git@gitlab.com:wahyubucil/learn-rails-docker.git
+deploy_git_repo: https://github.com/wahyubucil/learn-rails.git
 
 # What kind of environment do you use on your rails app?
 # Supported environment: dotenv, figaro

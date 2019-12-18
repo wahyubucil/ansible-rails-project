@@ -18,11 +18,9 @@
 - name: Select default ruby
   command: "{{ ruby_rvm }} alias create default {{ ruby_version }}"
 
-- name: Install bundler
-  command: "{{ ruby_rvm_install_path }}/wrappers/{{ ruby_version }}/gem install bundler"
-
-- name: Install rails
-  command: "{{ ruby_rvm_install_path }}/wrappers/{{ ruby_version }}/gem install rails -v {{ ruby_rails_version }}"
+- name: Install Rails default gems
+  command: "{{ ruby_rvm_install_path }}/wrappers/{{ ruby_version }}/gem install {{ item }}"
+  with_items: "{{ ruby_rails_default_gems }}"
 
 - name: Symlink ruby related binaries on the system path
   file:
