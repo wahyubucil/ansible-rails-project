@@ -1,0 +1,23 @@
+---
+# tasks file for certbot
+- name: Install pre-requisites packages
+  apt:
+    name: software-properties-common
+
+- name: Add universe repository
+  apt_repository:
+    repo: "{{ item }}"
+  with_items:
+    - "deb http://archive.ubuntu.com/ubuntu/ bionic universe"
+    - "deb http://archive.ubuntu.com/ubuntu/ bionic-updates universe"
+    - "deb http://security.ubuntu.com/ubuntu/ bionic-security universe"
+
+- name: Add certbot repository
+  apt_repository:
+    repo: ppa:certbot/certbot
+
+- name: Install certbot
+  apt:
+    name:
+      - certbot
+      - python-certbot-nginx
