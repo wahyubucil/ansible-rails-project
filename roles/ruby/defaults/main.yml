@@ -4,8 +4,8 @@
 ruby_version: ruby-2.6.3
 
 # Install path for rvm (defaults to system wide)
-ruby_rvm_install_path: /usr/share/rvm
+ruby_rvm_install_path: "/home/{{ ansible_user }}/.rvm"
 
 ruby_rails_default_gems:
-  - "bundler:2.0.2"
+  - "bundler"
   - "rails:6.0.1"

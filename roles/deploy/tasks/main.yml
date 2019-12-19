@@ -28,7 +28,7 @@
       include_tasks: figaro_config.yml
       when: deploy_rails_env == 'figaro'
 
-    - name: Compile Rails assets and run database migrations
+    - name: Compile Rails assets and run database setup
       command: 'bash -lc "cd {{ deploy_app_path }} && bundle exec rake assets:precompile db:setup RAILS_ENV=production"'
 
 - name: Setup Nginx

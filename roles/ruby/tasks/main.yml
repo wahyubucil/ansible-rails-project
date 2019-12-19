@@ -1,26 +1,32 @@
 ---
 # tasks file for ruby
-- name: Install pre-requisites package before installing Ruby using RVM
-  apt:
-    name: software-properties-common
+- name: Install RVM without root
+  become: False
+  block:
+    - name: Install rvm installer
+      get_url:
+        url: "https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer"
+        dest: "~/rvm-installer.sh"
+        mode: 0755
 
-- name: Add RVM repositories
-  apt_repository:
-    repo: ppa:rael-gc/rvm
+    - name: Import GPG keys from keyservers
+      command: "gpg --batch --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB"
+      changed_when: False
+      check_mode: False
+      ignore_errors: True
 
-- name: Install RVM
-  apt:
-    name: rvm
+    - name: Install rvm
+      command: "~/rvm-installer.sh stable --path {{ ruby_rvm_install_path }}"
 
-- name: Install Ruby from RVM
-  command: "{{ ruby_rvm }} install {{ ruby_version }}"
+    - name: Install Ruby from RVM
+      command: "{{ ruby_rvm }} install {{ ruby_version }}"
 
-- name: Select default ruby
-  command: "{{ ruby_rvm }} alias create default {{ ruby_version }}"
+    - name: Select default ruby
+      command: "{{ ruby_rvm }} alias create default {{ ruby_version }}"
 
-- name: Install Rails default gems
-  command: "{{ ruby_rvm_install_path }}/wrappers/{{ ruby_version }}/gem install {{ item }}"
-  with_items: "{{ ruby_rails_default_gems }}"
+    - name: Install Rails default gems
+      command: "{{ ruby_rvm_install_path }}/wrappers/{{ ruby_version }}/gem install {{ item }}"
+      with_items: "{{ ruby_rails_default_gems }}"
 
 - name: Symlink ruby related binaries on the system path
   file:
