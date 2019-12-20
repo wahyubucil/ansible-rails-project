@@ -3,7 +3,29 @@
     src: "{{ deploy_host_config }}.conf.j2"
     dest: "/etc/nginx/conf.d/{{ deploy_host_name }}.conf"
   when: not deploy_https
-#TODO: Create deploy https config
+
+- name: Setup SSL config
+  when: deploy_https
+  block:
+    - name: Run Certbot
+      command: >
+        certbot certonly --nginx -d {{ deploy_host_name }} -d www.{{ deploy_host_name }} 
+        --non-interactive --agree-tos -m {{ deploy_letsencrypt_email }}
+      when: deploy_letsencrypt_email != ""
+
+    - name: Run Certbot without email
+      command: >
+        certbot certonly --nginx -d {{ deploy_host_name }} -d www.{{ deploy_host_name }} 
+        --non-interactive --agree-tos --register-unsafely-without-email
+      when: deploy_letsencrypt_email == ""
+
+    - name: Test Certbot automatic renewal
+      command: certbot renew --dry-run
+
+    - name: Copy server block (SSL)
+      template:
+        src: "ssl.{{ deploy_host_config }}.conf.j2"
+        dest: "/etc/nginx/conf.d/{{ deploy_host_name }}.conf"
 
 - name: Restart service nginx
   service:

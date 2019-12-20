@@ -12,10 +12,13 @@ deploy_rails_env: dotenv
 
 deploy_ruby_command: "{{ ruby_rvm_install_path }}/gems/{{ ruby_version }}/wrappers/ruby"
 
-deploy_https: False
-
 # Supported options:
 # both = Support both www and non-www
 # www = Redirect non-www to www
 # non-www = Redirect www to non-www
 deploy_host_config: both
+
+deploy_https: True
+
+# Empty this if not using email reminder from letsencrypt
+deploy_letsencrypt_email: ""
