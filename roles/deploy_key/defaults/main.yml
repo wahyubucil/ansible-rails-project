@@ -4,4 +4,4 @@
 # Here I use ed25519
 deploy_key_path: "~/.ssh/id_ed25519"
 deploy_key_type: "ed25519"
-deploy_key_comment: "ansible-server"
+deploy_key_comment: "staging-server"
