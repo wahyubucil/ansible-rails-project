@@ -7,7 +7,7 @@ server {
 
     # and redirect to the https host (declared below)
     # avoiding http://www -> https://www -> https:// chain.
-    return 301 https://{{ deploy_host_name }}.com$request_uri;
+    return 301 https://{{ deploy_host_name }}$request_uri;
 }
 
 server {
