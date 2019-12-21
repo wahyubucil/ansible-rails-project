@@ -1,10 +1,10 @@
 ---
 # defaults file for deploy
-deploy_host_name: primakara.asteroit.id
+deploy_host_name: example.com
 
 deploy_app_path: "/var/www/{{ deploy_host_name }}"
 
-deploy_git_repo: git@gitlab.com:asteroit/stmik-primakara.git
+deploy_git_repo: https://github.com/wahyubucil/learn-rails.git
 
 # What kind of environment do you use on your rails app?
 # Supported environment: dotenv, figaro
@@ -16,7 +16,7 @@ deploy_ruby_command: "{{ ruby_rvm_install_path }}/gems/{{ ruby_version }}/wrappe
 # both = Support both www and non-www
 # www = Redirect non-www to www
 # non-www = Redirect www to non-www
-deploy_host_config: www
+deploy_host_config: both
 
 deploy_https: True
 
