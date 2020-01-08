@@ -25,6 +25,9 @@ server {
   # Include the basic h5bp config set
   include h5bp/basic.conf;
 
+  # set client body size to 10M
+  client_max_body_size 10M;
+
   # Turn on Passenger
   passenger_enabled on;
   passenger_ruby {{ deploy_ruby_command }};
